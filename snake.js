@@ -7,13 +7,14 @@ const tileCount = canvas.width / gridSize;
 let snake = [{ x: 10, y: 10 }];
 let direction = { x: 0, y: 0 };
 let food = { x: 15, y: 15 };
+let bfood = {x:-1,y:-1};
 let score = 0;
 let gameInterval;
 
 document.addEventListener('keydown', changeDirection);
 document.getElementById('restartButton').addEventListener('click', resetGame);
 
-function changeDirection(event) {
+function changeDirection(event, ctx) {
     const keyPressed = event.keyCode;
     const goingUp = direction.y === -1;
     const goingDown = direction.y === 1;
@@ -63,10 +64,22 @@ function updateGame() {
         score++;
         document.getElementById('score').textContent = score;
         placeFood();
+        if(score%5===0 && score!= 0)
+    {
+        placeBonucFood();
+        
+    }
     } else {
         snake.pop();
     }
-
+    if (head.x === bfood.x && head.y === bfood.y) {
+        score=score+2;
+        ctx.clearRect(bfood.x, bfood.y, 1, 1);
+        document.getElementById('score').textContent = score;
+        placeBonucFood(-1,-1);
+        
+    }
+    
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Отрисовка змейки
@@ -79,7 +92,14 @@ function updateGame() {
     });
 
     // Отрисовка еды
+    if(score%5===0 && score!= 0)
+    {
+        drawRect(bfood.x, bfood.y, 'gold');
+        
+    }
     drawRect(food.x, food.y, 'red');
+    
+    
 }
 
 function placeFood() {
@@ -92,6 +112,40 @@ function placeFood() {
     for (let segment of snake) {
         if (segment.x === food.x && segment.y === food.y) {
             placeFood();
+            return;
+        }
+    }
+}
+function nul(x,y) {
+    n = {x,y};
+
+    
+}
+
+function placeBonucFood() {
+    bfood = {
+        x: Math.floor(Math.random() * tileCount),
+        y: Math.floor(Math.random() * tileCount)
+    };
+
+    // Убедимся, что еда не появляется внутри змейки
+    for (let segment of snake) {
+        if (segment.x === bfood.x && segment.y === bfood.y) {
+            placeBonucFood();
+            return;
+        }
+    }
+}
+function placeBonucFood(x1,y2) {
+    bfood = {
+        x=x1,
+        y=y2
+    };
+
+    // Убедимся, что еда не появляется внутри змейки
+    for (let segment of snake) {
+        if (segment.x === bfood.x && segment.y === bfood.y) {
+            placeBonucFood();
             return;
         }
     }
