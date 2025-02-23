@@ -9,6 +9,7 @@ let direction = { x: 0, y: 0 };
 let food = { x: 15, y: 15 };
 let bfood = {x:-1,y:-1};
 let score = 0;
+let hscore=0;
 let gameInterval;
 
 document.addEventListener('keydown', changeDirection);
@@ -43,6 +44,11 @@ function drawRect(x, y, color) {
 function updateGame() {
     const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
 
+    if(score>hscore)
+    {
+        hscore=score;
+        document.getElementById('hscore').textContent = hscore;
+    }
     // Проверка столкновения со стенами
     if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
         resetGame();
@@ -76,14 +82,14 @@ function updateGame() {
         score=score+2;
         ctx.clearRect(bfood.x, bfood.y, 1, 1);
         document.getElementById('score').textContent = score;
-        placeBonucFood(-1,-1);
+        placeBonucFood();
         
     }
     
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Отрисовка змейки
-    snake.forEach((segment, index) => {
+    snake.forEach((segment, index) =>  {
         if (index === 0) {
             drawRect(segment.x, segment.y, 'darkgreen'); // Голова змейки
         } else {
@@ -136,28 +142,16 @@ function placeBonucFood() {
         }
     }
 }
-function placeBonucFood(x1,y2) {
-    bfood = {
-        x=x1,
-        y=y2
-    };
 
-    // Убедимся, что еда не появляется внутри змейки
-    for (let segment of snake) {
-        if (segment.x === bfood.x && segment.y === bfood.y) {
-            placeBonucFood();
-            return;
-        }
-    }
-}
 
 function resetGame() {
     clearInterval(gameInterval);
     snake = [{ x: 10, y: 10 }];
     direction = { x: 0, y: 0 };
     score = 0;
+    
     document.getElementById('score').textContent = score;
-    placeFood();
+    
     gameInterval = setInterval(updateGame, 100);
 }
 

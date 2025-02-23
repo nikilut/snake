@@ -9,8 +9,15 @@
 <body>
     <div class="game-container">
         <div class="score-board">
+            <div class="hscore">Лучший счет: <span id="hscore">0</span></div>
             <div class="score">Счет: <span id="score">0</span></div>
-            <button id="restartButton">Перезапустить игру</button>
+            <button id="restartButton" class="button">
+                <span class="button_lg">
+                    <span class="button_sl"></span>
+                    <span class="button_text">Перезапустить игру</span>
+                </span>
+            </button>
+            
         </div>
         <canvas id="gameCanvas" width="400" height="400"></canvas>
     </div>
