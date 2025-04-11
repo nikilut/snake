@@ -45,13 +45,13 @@ function drawRect(x, y, color) {
 }
 
 function updateGame() {
-    if(score==5&&x==1)
+    if(score>=5)
     {
         clearInterval(gameInterval);
         gameInterval = setInterval(updateGame, 90);
         x++;
     }
-    if(score==10&&x==2)
+    if(score>=10)
     {
         clearInterval(gameInterval);
         gameInterval = setInterval(updateGame, 70);
@@ -62,16 +62,96 @@ function updateGame() {
 
     if(score>hscore)
     {
+        
+        
         hscore=score;
         document.getElementById('hscore').textContent = hscore;
     }
     // Проверка столкновения со стенами
-    if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
+    if (head.y >tileCount) {
+        clearInterval(gameInterval);
         
-        resetGame();
-        return;
+        head.y=0;
+        rplaceFood(food.x,food.y);
+        rplacebFood(bfood.x,bfood.y);
+        rplaceb(bonuc.x,bonuc.y);
+        gameInterval = setInterval(updateGame, 90);
     }
+    if (head.y <0) {
+        clearInterval(gameInterval);
+        head.y=26;
+        rplaceFood(food.x,food.y);
+        rplacebFood(bfood.x,bfood.y);
+        rplaceb(bonuc.x,bonuc.y);
+        gameInterval = setInterval(updateGame, 90);
+    }
+    if (head.x >tileCount) {
+        clearInterval(gameInterval);
+        head.x=0;
+        rplaceFood(food.x,food.y);
+        rplacebFood(bfood.x,bfood.y);
+        rplaceb(bonuc.x,bonuc.y);
+        gameInterval = setInterval(updateGame, 90);
+    }
+    if (head.x <0) {
+        clearInterval(gameInterval);
+        head.x=26;
+        rplaceFood(food.x,food.y);
+        rplacebFood(bfood.x,bfood.y);
+        rplaceb(bonuc.x,bonuc.y);
+        gameInterval = setInterval(updateGame, 90);
+    }
+    for (let segment of snake) {
+        clearInterval(gameInterval);
+        if (segment.y >tileCount) {
+            segment.y=0;
 
+        }
+        rplaceFood(food.x,food.y);
+        rplacebFood(bfood.x,bfood.y);
+        rplaceb(bonuc.x,bonuc.y);
+        gameInterval = setInterval(updateGame, 90);
+    }
+    for (let segment of snake) {
+        clearInterval(gameInterval);
+        if (segment.y <0) {
+            segment.y=26;
+        }
+        rplaceFood(food.x,food.y);
+        rplacebFood(bfood.x,bfood.y);
+        rplaceb(bonuc.x,bonuc.y);
+        gameInterval = setInterval(updateGame, 90);
+    }
+    for (let segment of snake) {
+        clearInterval(gameInterval);
+        if (segment.x >tileCount) {
+            segment.x=0;
+        }
+        rplaceFood(food.x,food.y);
+        rplacebFood(bfood.x,bfood.y);
+        rplaceb(bonuc.x,bonuc.y);
+        gameInterval = setInterval(updateGame, 90);
+    }
+    for (let segment of snake) {
+        clearInterval(gameInterval);
+        if (segment.x <0) {
+            segment.x=26;
+        }
+        rplaceFood(food.x,food.y);
+        rplacebFood(bfood.x,bfood.y);
+        rplaceb(bonuc.x,bonuc.y);
+        gameInterval = setInterval(updateGame, 90);
+    }
+    head.x=head.x;
+    head.y=head.y;
+    for (let segment of snake) {
+        
+        segment.x=segment.x;
+        segment.y=segment.y;
+
+    }
+    ctx.save();
+    ctx.restore();
     // Проверка столкновения с самой собой
     for (let i = 1; i < snake.length; i++) {
         if (snake[i].x === head.x && snake[i].y === head.y) {
@@ -229,7 +309,24 @@ function updateGame() {
     drawRect(bonuc.x+1, bonuc.y+1, 'blue');
     
 }
+function rplaceFood(x,y) {
+    food.x=x;
+    food.y=y;
 
+   
+}
+function rplacebFood(x,y) {
+    bfood.x=x;
+    bfood.y=y;
+
+   
+}
+function rplaceb(x,y) {
+    bonuc.x=x;
+    bonuc.y=y;
+
+   
+}
 function placeFood() {
     food = {
         x: Math.floor(Math.random() * (tileCount-1)),
@@ -265,12 +362,7 @@ function placeBonucFood() {
             return;
         }
     }
-    for (let segment of snake) {
-        if (segment.y <3) {
-            placeBonucFood();
-            return;
-        }
-    }
+    
 }
 function bon(){
     
@@ -306,12 +398,7 @@ function placeBonuc() {
             return;
         }
     }
-    for (let segment of snake) {
-        if (segment.y <3) {
-            placeBonuc();
-            return;
-        }
-    }
+    
     
 }
 
